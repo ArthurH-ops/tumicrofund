@@ -1,0 +1,6 @@
+Drop the real partner logos here:
+  - tuwien.svg          (or tuwien.png)
+  - spinoff-factory.svg (or spinoff-factory.png)
+Then edit components/Partners.tsx — replace each placeholder <div>
+with an <img src="/logos/<file>" alt="..." className="h-12 md:h-16 w-auto" /> tag.
+SVG is preferred (scales perfectly, much smaller); PNG is fine if that's what you have.
