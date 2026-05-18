@@ -13,7 +13,7 @@ export default function Hero() {
           transition={{ duration: 0.5 }}
           className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-ink/60 mb-10"
         >
-          The 1040 Voucher · TU Wien
+          The Spinoff Microfund · TU Wien
         </motion.p>
 
         <motion.h1

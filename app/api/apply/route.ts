@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
           title: projectName,
           color: BRAND_COLOR,
           fields,
-          footer: { text: 'The 1040 Voucher · landing form' },
+          footer: { text: 'The Spinoff Microfund · landing form' },
           timestamp: submittedAt,
         },
       ],

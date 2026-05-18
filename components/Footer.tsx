@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="h-[3px] bg-brand" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink/70">
-          The 1040 Voucher · TU Wien
+          The Spinoff Microfund · TU Wien
         </p>
         <a
           href="mailto:hello@example.at"

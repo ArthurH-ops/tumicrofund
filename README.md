@@ -1,4 +1,4 @@
-# The 1040 Voucher — Landing
+# The Spinoff Microfund — Landing
 
 Single-page landing site. **Next.js 14 (App Router) + TypeScript + Tailwind + Framer Motion.**
 

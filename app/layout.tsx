@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'The 1040 Voucher — Break things. Build things.',
+  title: 'The Spinoff Microfund — Break things. Build things.',
   description:
     'A microfund for TU Wien students with prototypes to build and no time to waste. Small, fast, no-equity checks for student projects.',
 }
