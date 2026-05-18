@@ -20,12 +20,12 @@ export default function Hero() {
             <img
               src="/logos/tuwien.jpg"
               alt="TU Wien"
-              className="h-7 md:h-9 w-auto mix-blend-multiply"
+              className="h-10 md:h-14 w-auto mix-blend-multiply"
             />
             <img
               src="/logos/spinoff-factory.svg"
               alt="Spinoff Factory"
-              className="h-7 md:h-9 w-auto"
+              className="h-10 md:h-14 w-auto"
             />
           </div>
         </motion.div>
