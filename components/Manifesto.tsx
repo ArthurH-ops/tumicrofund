@@ -1,26 +1,18 @@
-'use client'
-
-import { motion } from 'framer-motion'
+import Asterisk from './Asterisk'
 
 export default function Manifesto() {
   return (
-    <section className="px-6 md:px-12 py-12 md:py-20">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6 }}
-          className="bg-brand border-2 border-ink p-10 md:p-20"
-        >
-          <p className="font-display font-bold text-4xl md:text-7xl lg:text-8xl leading-[0.95] tracking-[-0.03em]">
+    <section className="max-w-container mx-auto px-6 pt-12">
+      <div className="relative overflow-hidden rounded-lg border border-ink bg-brand px-[clamp(20px,5vw,48px)] py-[clamp(28px,5vw,56px)]">
+        <Asterisk className="pointer-events-none absolute right-4 top-[-60px] w-[320px] h-[320px] text-brand-deep" />
+        <div className="relative max-w-[760px]">
+          <h2 className="font-display font-medium text-[44px] leading-[1.05] tracking-tight [text-wrap:balance]">
             Have fun and break things.
+          </h2>
+          <p className="mt-4 max-w-[600px] text-lg leading-[1.45] [text-wrap:pretty]">
+            Science is breaking things to build things. Prototypes don&rsquo;t wait for paperwork. Neither should you.
           </p>
-          <p className="mt-8 md:mt-10 max-w-3xl text-lg md:text-2xl leading-snug text-ink/85">
-            Science is breaking things to build things. Prototypes don&rsquo;t wait for paperwork.
-            Neither should you.
-          </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
-# The Spinoff Microfund — Landing
+# TU Microfund — Landing
 
 Single-page landing site. **Next.js 14 (App Router) + TypeScript + Tailwind + Framer Motion.**
+Styled with the **TU Microfund design system** (sister system of the TU Student Incubator; part of The Spinoff Factory, TU Wien).
 
 ## Run
 
@@ -18,7 +19,15 @@ npm run build
 npm start
 ```
 
-## Application webhook
+## Application link
+
+All Apply buttons read `APPLY_URL` from `lib/config.ts`. Paste the Notion form link there and the buttons open it in a new tab. Leave it empty to keep the built-in form below.
+
+```ts
+export const APPLY_URL = 'https://www.notion.so/...'
+```
+
+## Application webhook (built-in form)
 
 The form posts to `/api/apply` (a Next.js route handler) which accepts a `multipart/form-data` payload (name, email, project name, one-line description, video file, optional notes) and forwards it to the URL in `DISCORD_WEBHOOK_URL`.
 
@@ -44,25 +53,43 @@ app/
   page.tsx            composes sections
   globals.css         Tailwind + base styles
   api/apply/route.ts  form receiver
+lib/
+  config.ts           APPLY_URL – application link (Notion)
 components/
+  SiteHeader.tsx      sticky header: Microfund lockup + Apply
   Hero.tsx
   WhatItIs.tsx
   Stats.tsx
   HowItWorks.tsx
   Manifesto.tsx
   ApplyCTA.tsx
-  Footer.tsx
+  Footer.tsx          "In cooperation with" Spinoff Factory · TU Wien
   ApplyButton.tsx
   ApplyModal.tsx
   ModalContext.tsx
+  Asterisk.tsx        brand asterisk
+  Eyebrow.tsx         asterisk + tracked caps section label
+public/logos/
+  microfund.svg              stack lockup (asterisk + MICRO / FUND)
+  spinoff-factory-tuwien.svg partner lockup (footer only)
+  favicon.svg, apple-touch-icon.png
 ```
 
 ## Design tokens
 
-| Token  | Value     | Use                          |
-| ------ | --------- | ---------------------------- |
-| brand  | `#FCED62` | accents, CTAs, highlights    |
-| paper  | `#FAFAF7` | page background              |
-| ink    | `#0A0A0A` | text, borders, dividers      |
+From the TU Microfund design system (`tokens/colors.css`, `typography.css`, `spacing.css`), mapped in `tailwind.config.ts`.
 
-Display font: **Inter Tight** · Mono: **JetBrains Mono** (both via `next/font/google`).
+| Token        | Value     | Use                                         |
+| ------------ | --------- | ------------------------------------------- |
+| brand        | `#FCEE64` | primary: hero, highlights, last step, focus |
+| brand-deep   | `#F3DC35` | asterisk watermark, hover on yellow         |
+| brand-ink    | `#574C00` | link hover on white                         |
+| brand-pale   | `#FFF6BF` | soft yellow backgrounds                     |
+| ink          | `#111010` | text, 1.5px outlines, primary buttons       |
+| paper        | `#FFFFFF` | page background                             |
+| stone        | `#EEEFEA` | quiet surfaces, button hover                |
+| hairline     | `#D5D6D0` | 1px rules                                   |
+
+Outlines `1.5px` (Tailwind `border`), corners `8px` (`rounded-md`) / `12px` (`rounded-lg`), no shadows.
+
+Display font: **Space Grotesk** · Body: **Inter** (both via `next/font/google`).

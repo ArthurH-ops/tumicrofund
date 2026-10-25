@@ -1,3 +1,4 @@
+import SiteHeader from '@/components/SiteHeader'
 import Hero from '@/components/Hero'
 import WhatItIs from '@/components/WhatItIs'
 import Stats from '@/components/Stats'
@@ -8,14 +9,17 @@ import Footer from '@/components/Footer'
 
 export default function Page() {
   return (
-    <main>
-      <Hero />
-      <WhatItIs />
-      <Stats />
-      <HowItWorks />
-      <Manifesto />
-      <ApplyCTA />
-      <Footer />
-    </main>
+    <>
+      <SiteHeader />
+      <main id="top">
+        <Hero />
+        <WhatItIs />
+        <Stats />
+        <HowItWorks />
+        <Manifesto />
+        <ApplyCTA />
+        <Footer />
+      </main>
+    </>
   )
 }

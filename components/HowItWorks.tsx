@@ -1,56 +1,36 @@
-'use client'
-
-import { motion } from 'framer-motion'
+import { Fragment } from 'react'
+import Eyebrow from './Eyebrow'
 
 const steps = [
-  {
-    n: '01',
-    title: 'Pitch.',
-    body: 'Record a 60-second video. Tell us what you’re building and why.',
-  },
-  {
-    n: '02',
-    title: 'Submit.',
-    body: 'Drop it through the form below. Takes a minute.',
-  },
-  {
-    n: '03',
-    title: 'Get funded.',
-    body: 'We review fast. If it’s a yes, money hits in hours.',
-  },
+  { n: '01', title: 'Pitch.', body: 'Record a 60-second video. Tell us what you’re building and why.' },
+  { n: '02', title: 'Submit.', body: 'Drop it through the form below. Takes a minute.' },
+  { n: '03', title: 'Get funded.', body: 'We review fast. If it’s a yes, money hits in hours.' },
 ]
 
+// Design-system StepFlow: outlined steps joined by →, the last step filled with the brand yellow.
 export default function HowItWorks() {
   return (
-    <section className="px-6 md:px-12 py-20 md:py-32 border-t border-ink/10">
-      <div className="max-w-7xl mx-auto">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink/60 mb-12">
-          02 — How it works
-        </p>
-        <div className="grid md:grid-cols-3 gap-12 md:gap-10">
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.n}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+    <section id="how" className="max-w-container mx-auto px-6 pt-12 flex flex-col gap-[14px] scroll-mt-[72px]">
+      <Eyebrow>02 · How it works</Eyebrow>
+      <div className="flex flex-wrap items-stretch gap-2">
+        {steps.map((step, i) => (
+          <Fragment key={step.n}>
+            {i > 0 && (
+              <span aria-hidden="true" className="self-center font-display font-medium text-xl">
+                →
+              </span>
+            )}
+            <div
+              className={`flex-[1_1_180px] rounded-md border border-ink p-4 ${
+                i === steps.length - 1 ? 'bg-brand' : 'bg-paper'
+              }`}
             >
-              <p
-                className="font-display font-bold text-7xl md:text-8xl leading-none tracking-[-0.04em] text-brand"
-                style={{ WebkitTextStroke: '1.5px #0A0A0A' }}
-              >
-                {step.n}
-              </p>
-              <h3 className="mt-6 font-display font-bold text-2xl md:text-3xl tracking-[-0.02em]">
-                {step.title}
-              </h3>
-              <p className="mt-3 text-ink/70 text-base md:text-lg leading-snug max-w-sm">
-                {step.body}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+              <p className="mb-[6px] font-display font-medium text-[10px] uppercase tracking-label">{step.n}</p>
+              <h3 className="mb-[6px] font-display font-medium text-base leading-[1.2]">{step.title}</h3>
+              <p className="text-[13px] leading-[1.45]">{step.body}</p>
+            </div>
+          </Fragment>
+        ))}
       </div>
     </section>
   )

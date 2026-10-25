@@ -3,11 +3,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useModal } from './ModalContext'
+import Asterisk from './Asterisk'
+import Eyebrow from './Eyebrow'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 const MAX_FILE_SIZE_MB = 100
 const MAX_DESC_CHARS = 140
+
+// Design-system field: uppercase Space Grotesk label, 1.5px ink outline, 8px corners, 3px yellow focus ring.
+const inputClass =
+  'w-full rounded-md border border-ink bg-paper px-3 py-[10px] text-[15px] leading-[1.45] text-ink outline-none focus:ring-[3px] focus:ring-brand placeholder:text-ink-4'
+const ringClass = 'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand'
+const ghostButton = `rounded-md border border-transparent px-3 py-[7px] font-display font-medium text-[13px] hover:bg-stone transition-colors duration-[120ms] ${ringClass}`
+const secondaryButton = `rounded-md border border-ink bg-paper px-[18px] py-[11px] font-display font-medium text-[15px] hover:bg-stone transition-colors duration-[120ms] active:translate-x-px active:translate-y-px ${ringClass}`
 
 export default function ApplyModal() {
   const { isOpen, close } = useModal()
@@ -155,49 +164,38 @@ export default function ApplyModal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm flex md:items-center md:justify-center"
+          transition={{ duration: 0.2, ease: [0.2, 0.7, 0.2, 1] }}
+          className="fixed inset-0 z-50 bg-ink/55 flex md:items-center md:justify-center"
           onClick={handleClose}
           role="dialog"
           aria-modal="true"
           aria-labelledby="apply-modal-title"
         >
-          <motion.div
+          <div
             ref={dialogRef}
-            initial={{ opacity: 0, y: 12, scale: 0.99 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.99 }}
-            transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1] }}
-            className="bg-paper text-ink w-full md:w-[92%] md:max-w-2xl md:max-h-[92vh] h-full md:h-auto overflow-y-auto border-y-2 md:border-2 border-ink"
+            className="bg-paper text-ink w-full md:w-[92%] md:max-w-[640px] md:max-h-[92vh] h-full md:h-auto overflow-y-auto border-y md:border border-ink md:rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {status === 'success' ? (
               <SuccessPanel onClose={handleClose} />
             ) : (
-              <form onSubmit={submit} className="p-6 md:p-10" noValidate>
-                <div className="flex items-start justify-between gap-4 mb-8">
-                  <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink/60">
-                      Apply
-                    </p>
+              <form onSubmit={submit} className="px-6 py-7 md:px-8 md:pb-8 flex flex-col gap-[18px]" noValidate>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-[10px]">
+                    <Eyebrow>Apply</Eyebrow>
                     <h2
                       id="apply-modal-title"
-                      className="mt-2 font-display font-bold text-3xl md:text-5xl tracking-[-0.03em] leading-[0.95]"
+                      className="font-display font-medium text-[32px] md:text-[40px] leading-[1.05] tracking-tight"
                     >
                       Pitch your project.
                     </h2>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    aria-label="Close application form"
-                    className="shrink-0 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] px-3 py-2 hover:bg-ink hover:text-paper transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-                  >
-                    Close ✕
+                  <button type="button" onClick={handleClose} aria-label="Close application form" className={ghostButton}>
+                    Close
                   </button>
                 </div>
 
-                <div className="space-y-6">
+                <div className="grid gap-[14px] sm:grid-cols-2">
                   <Field label="Name" htmlFor="name">
                     <input
                       ref={firstInputRef}
@@ -208,10 +206,9 @@ export default function ApplyModal() {
                       autoComplete="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-lg"
+                      className={inputClass}
                     />
                   </Field>
-
                   <Field label="Email" htmlFor="email">
                     <input
                       id="email"
@@ -219,97 +216,94 @@ export default function ApplyModal() {
                       type="email"
                       required
                       autoComplete="email"
+                      placeholder="name@student.tuwien.ac.at"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-lg"
-                    />
-                  </Field>
-
-                  <Field label="Project name" htmlFor="projectName">
-                    <input
-                      id="projectName"
-                      name="projectName"
-                      type="text"
-                      required
-                      value={projectName}
-                      onChange={(e) => setProjectName(e.target.value)}
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-lg"
-                    />
-                  </Field>
-
-                  <Field
-                    label="One-line description"
-                    htmlFor="description"
-                    hint={`${description.length}/${MAX_DESC_CHARS}`}
-                    hintError={description.length > MAX_DESC_CHARS}
-                  >
-                    <input
-                      id="description"
-                      name="description"
-                      type="text"
-                      required
-                      maxLength={MAX_DESC_CHARS}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-lg"
-                    />
-                  </Field>
-
-                  <Field
-                    label="What's the money for?"
-                    htmlFor="budget"
-                    hint="Rough breakdown is fine"
-                  >
-                    <textarea
-                      id="budget"
-                      name="budget"
-                      rows={4}
-                      required
-                      value={budget}
-                      onChange={(e) => setBudget(e.target.value)}
-                      placeholder="e.g. €800 components · €500 fab time · €200 shipping"
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-base resize-none placeholder:text-ink/30"
-                    />
-                  </Field>
-
-                  <VideoField file={video} onChange={handleFile} />
-
-                  <Field label="Anything else we should know?" htmlFor="notes" optional>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      rows={3}
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="w-full bg-transparent border-b-2 border-ink/30 focus:border-ink py-2 outline-none text-base resize-none"
+                      className={inputClass}
                     />
                   </Field>
                 </div>
 
+                <Field label="Project name" htmlFor="projectName">
+                  <input
+                    id="projectName"
+                    name="projectName"
+                    type="text"
+                    required
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    className={inputClass}
+                  />
+                </Field>
+
+                <Field
+                  label="One-line description"
+                  htmlFor="description"
+                  hint={`${description.length} / ${MAX_DESC_CHARS}`}
+                  hintError={description.length > MAX_DESC_CHARS}
+                >
+                  <input
+                    id="description"
+                    name="description"
+                    type="text"
+                    required
+                    maxLength={MAX_DESC_CHARS}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className={inputClass}
+                  />
+                </Field>
+
+                <Field label="What's the money for?" htmlFor="budget" hint="Rough breakdown is fine">
+                  <textarea
+                    id="budget"
+                    name="budget"
+                    rows={3}
+                    required
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                    placeholder="e.g. €800 components · €500 fab time · €200 shipping"
+                    className={`${inputClass} resize-y`}
+                  />
+                </Field>
+
+                <VideoField file={video} onChange={handleFile} />
+
+                <Field label="Anything else we should know?" htmlFor="notes" optional>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    rows={2}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className={`${inputClass} resize-y`}
+                  />
+                </Field>
+
                 {status === 'error' && errorMessage && (
                   <p
                     role="alert"
-                    className="mt-6 font-mono text-xs md:text-sm text-red-700 border border-red-700 px-3 py-2 bg-red-50"
+                    className="rounded-md border border-coral bg-coral-pale px-3 py-[10px] text-[13px] text-coral-text"
                   >
                     {errorMessage}
                   </p>
                 )}
 
-                <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-5">
+                <div className="mt-1 flex flex-wrap items-center gap-4">
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="bg-brand text-ink font-semibold px-8 py-4 text-lg hover:bg-ink hover:text-brand transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                    className={`inline-flex items-center justify-center rounded-md border border-ink bg-ink text-paper font-display font-medium px-6 py-[15px] text-[17px] hover:bg-ink-2 active:translate-x-px active:translate-y-px transition-colors duration-[120ms] disabled:opacity-40 disabled:cursor-not-allowed ${ringClass}`}
                   >
-                    {status === 'submitting' ? 'Sending…' : 'Send it →'}
+                    {status === 'submitting' ? 'Sending…' : 'Send it'}
                   </button>
-                  <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-ink/60">
+                  <Eyebrow asterisk={false} size="sm" muted>
                     We reply to every application.
-                  </p>
+                  </Eyebrow>
                 </div>
               </form>
             )}
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -332,51 +326,29 @@ function Field({
   children: React.ReactNode
 }) {
   return (
-    <div>
-      <div className="flex items-baseline justify-between mb-1">
-        <label
-          htmlFor={htmlFor}
-          className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-ink/70"
-        >
-          {label}
-          {optional && <span className="text-ink/40"> (optional)</span>}
-        </label>
-        {hint && (
-          <span
-            className={`font-mono text-[10px] md:text-xs ${
-              hintError ? 'text-red-700' : 'text-ink/50'
-            }`}
-          >
-            {hint}
-          </span>
-        )}
-      </div>
+    <div className="flex flex-col gap-[6px]">
+      <label htmlFor={htmlFor} className="font-display font-medium text-[11px] uppercase tracking-label">
+        {label}
+        {optional && <span className="text-ink-3"> (optional)</span>}
+      </label>
       {children}
+      {hint && <span className={`text-xs ${hintError ? 'text-coral-text' : 'text-ink-3'}`}>{hint}</span>}
     </div>
   )
 }
 
-function VideoField({
-  file,
-  onChange,
-}: {
-  file: File | null
-  onChange: (f: File | null) => void
-}) {
+function VideoField({ file, onChange }: { file: File | null; onChange: (f: File | null) => void }) {
   const inputRef = useRef<HTMLInputElement>(null)
   return (
-    <div>
-      <label
-        htmlFor="video"
-        className="block font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-ink/70 mb-2"
-      >
+    <div className="flex flex-col gap-[6px]">
+      <label htmlFor="video" className="font-display font-medium text-[11px] uppercase tracking-label">
         Video pitch
       </label>
-      <div className="border-2 border-dashed border-ink/30 p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="rounded-md border border-dashed border-ink p-3 flex flex-col sm:flex-row sm:items-center gap-[14px]">
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="bg-ink text-paper font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] px-4 py-3 hover:bg-brand hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+          className={`self-start rounded-md border border-ink bg-paper px-3 py-[7px] font-display font-medium text-[13px] hover:bg-stone transition-colors duration-[120ms] ${ringClass}`}
         >
           {file ? 'Replace video' : 'Pick a video'}
         </button>
@@ -390,10 +362,8 @@ function VideoField({
           className="sr-only"
           onChange={(e) => onChange(e.target.files?.[0] ?? null)}
         />
-        <p className="font-mono text-[11px] md:text-xs text-ink/70 break-all">
-          {file
-            ? `${file.name} · ${(file.size / (1024 * 1024)).toFixed(1)} MB`
-            : 'MP4, MOV, WEBM · Max 100 MB'}
+        <p className={`text-[13px] break-all ${file ? 'text-ink' : 'text-ink-3'}`}>
+          {file ? `${file.name} · ${(file.size / (1024 * 1024)).toFixed(1)} MB` : 'MP4, MOV, WEBM · Max 100 MB'}
         </p>
       </div>
     </div>
@@ -402,39 +372,16 @@ function VideoField({
 
 function SuccessPanel({ onClose }: { onClose: () => void }) {
   return (
-    <div className="p-6 md:p-12 min-h-[60vh] md:min-h-0 flex flex-col">
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Close"
-        className="self-end font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] px-3 py-2 hover:bg-ink hover:text-paper transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-      >
-        Close ✕
+    <div className="relative overflow-hidden bg-brand px-6 py-10 md:px-8 md:py-12 min-h-[60vh] md:min-h-0 flex flex-col">
+      <Asterisk className="pointer-events-none absolute right-4 top-[-44px] w-[288px] h-[288px] text-brand-deep" />
+      <button type="button" onClick={onClose} aria-label="Close" className={`relative self-end rounded-md border border-transparent px-3 py-[7px] font-display font-medium text-[13px] hover:bg-brand-deep transition-colors duration-[120ms] ${ringClass}`}>
+        Close
       </button>
-      <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
-        <div className="w-24 h-24 md:w-32 md:h-32 bg-brand border-2 border-ink flex items-center justify-center">
-          <svg viewBox="0 0 40 40" className="w-12 h-12 md:w-16 md:h-16" aria-hidden="true">
-            <polyline
-              points="6,21 16,30 34,12"
-              stroke="#0A0A0A"
-              strokeWidth="5"
-              fill="none"
-              strokeLinecap="square"
-              strokeLinejoin="miter"
-            />
-          </svg>
-        </div>
-        <p className="mt-10 font-display font-bold text-4xl md:text-6xl tracking-[-0.03em]">
-          Got it.
-        </p>
-        <p className="mt-4 text-lg md:text-xl text-ink/70 max-w-md">
-          We&rsquo;ll be in touch.
-        </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="mt-10 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] underline underline-offset-4 hover:text-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-        >
+      <div className="relative flex-1 flex flex-col items-start justify-center gap-[14px] py-6">
+        <Eyebrow>Application received</Eyebrow>
+        <p className="font-display font-medium text-[44px] leading-[1.05] tracking-tight">Got it.</p>
+        <p className="text-base leading-[1.5]">We&rsquo;ll be in touch.</p>
+        <button type="button" onClick={onClose} className={`mt-3 ${secondaryButton}`}>
           Close window
         </button>
       </div>

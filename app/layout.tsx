@@ -1,33 +1,35 @@
 import type { Metadata } from 'next'
-import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
+import { Space_Grotesk, Inter } from 'next/font/google'
 import { ModalProvider } from '@/components/ModalContext'
 import ApplyModal from '@/components/ApplyModal'
 import './globals.css'
 
-const interTight = Inter_Tight({
-  subsets: ['latin'],
+// Same families as the design system: Space Grotesk (display, labels, numbers) + Inter (body).
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-display',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  weight: ['400', '500'],
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-body',
+  weight: ['400', '600'],
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'The Spinoff Microfund — Break things. Build things.',
+  title: 'TU Microfund — Break things. Build things.',
   description:
     'A microfund for TU Wien students with prototypes to build and no time to waste. Small, fast, no-equity checks for student projects.',
+  icons: { icon: '/logos/favicon.svg', apple: '/logos/apple-touch-icon.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${interTight.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-paper text-ink">
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <body className="bg-paper text-ink font-body">
         <ModalProvider>
           {children}
           <ApplyModal />

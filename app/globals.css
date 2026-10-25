@@ -6,19 +6,23 @@ html, body {
   height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: var(--font-display), system-ui, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background-color: #FCED62;
-  color: #0A0A0A;
+  background-color: #FCEE64;
+  color: #111010;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #0A0A0A;
+  -webkit-text-fill-color: #111010;
   transition: background-color 99999s ease-in-out 0s;
 }

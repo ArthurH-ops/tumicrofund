@@ -1,73 +1,28 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import ApplyButton from './ApplyButton'
+import Asterisk from './Asterisk'
 
 export default function Hero() {
   return (
-    <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 md:mb-14 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6"
-        >
-          <p className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-ink/60">
-            The Spinoff Microfund
-          </p>
-          <div className="flex items-center gap-6 md:gap-8 shrink-0">
-            <img
-              src="/logos/tuwien.jpg"
-              alt="TU Wien"
-              className="h-10 md:h-14 w-auto mix-blend-multiply"
-            />
-            <img
-              src="/logos/spinoff-factory.svg"
-              alt="Spinoff Factory"
-              className="h-10 md:h-14 w-auto"
-            />
-          </div>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="font-display font-bold tracking-[-0.04em] leading-[0.9] text-[clamp(3.5rem,13vw,14rem)]"
-        >
+    <section className="relative overflow-hidden bg-brand px-[clamp(20px,5vw,64px)] py-[clamp(32px,5vw,64px)]">
+      <Asterisk className="pointer-events-none absolute right-[-2%] top-[-18%] w-[clamp(260px,38vw,520px)] h-[clamp(260px,38vw,520px)] text-brand-deep" />
+      <div className="relative max-w-[820px]">
+        <p className="mb-4 font-display font-medium text-xs uppercase tracking-eyebrow">
+          TU Microfund
+        </p>
+        <h1 className="font-display font-medium text-[clamp(40px,6vw,72px)] leading-[1.04] tracking-tight [text-wrap:balance]">
           Break things.
           <br />
-          <span className="relative inline-block">
-            <span
-              aria-hidden="true"
-              className="absolute -inset-x-[0.04em] -inset-y-[0.02em] bg-brand"
-            />
-            <span className="relative">Build</span>
-          </span>{' '}
-          things.
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-10 md:mt-14 max-w-2xl text-lg md:text-2xl text-ink/80 leading-snug"
-        >
+          Build things.
+        </h1>
+        <p className="mt-5 max-w-[640px] text-lg leading-[1.45] [text-wrap:pretty]">
           A microfund for TU Wien students with prototypes to build and no time to waste.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-10 flex flex-col sm:flex-row sm:items-center gap-5"
-        >
-          <ApplyButton size="lg">Apply now →</ApplyButton>
-          <p className="font-mono text-xs md:text-sm text-ink/60 tracking-wide">
+        </p>
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <ApplyButton size="lg">Apply now</ApplyButton>
+          <p className="font-display font-medium text-xs uppercase tracking-label">
             60 seconds. One video. That&rsquo;s it.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
