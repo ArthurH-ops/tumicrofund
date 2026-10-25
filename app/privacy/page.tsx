@@ -43,7 +43,7 @@ export default function PrivacyPage() {
       </LegalSection>
 
       <LegalSection>
-        <p className="text-ink-3 text-[13px]">Owner of site: © 2026 The Spinoff Factory</p>
+        <p className="text-ink-3 text-[13px]">© 2026 The Spinoff Factory</p>
       </LegalSection>
     </LegalLayout>
   )

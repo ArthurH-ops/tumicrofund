@@ -1,5 +1,6 @@
 const MAIL = 'team@tumicrofund.at'
 const label = 'font-display font-medium text-[11px] uppercase tracking-eyebrow text-ink-3'
+const ring = 'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand'
 const legal = [
   ['/impressum', 'Impressum'],
   ['/privacy', 'Privacy'],
@@ -11,7 +12,15 @@ export default function Footer() {
       <div className="max-w-container mx-auto px-6 pt-6 pb-5 flex flex-col gap-5">
         <div className="flex flex-wrap items-center gap-7">
           <p className={label}>In cooperation with</p>
-          <img src="/logos/spinoff-factory-tuwien.svg" alt="The Spinoff Factory · TU Wien" className="h-9 w-auto" />
+          <a
+            href="https://www.spinoff-factory.at"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="The Spinoff Factory – opens in a new tab"
+            className={`rounded-[2px] hover:opacity-70 transition-opacity duration-[120ms] ${ring}`}
+          >
+            <img src="/logos/spinoff-factory-tuwien.svg" alt="The Spinoff Factory · TU Wien" className="h-9 w-auto" />
+          </a>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-4 border-t-[1px] border-hairline pt-4">
           <nav className="flex flex-wrap items-center gap-5">
@@ -47,7 +56,7 @@ export default function Footer() {
           </a>
         </div>
         <p className="font-display text-[11px] text-ink-4 border-t-[1px] border-hairline pt-4">
-          Owner of site: © 2026 The Spinoff Factory
+          © 2026 The Spinoff Factory
         </p>
       </div>
     </footer>
