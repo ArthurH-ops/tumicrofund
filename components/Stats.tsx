@@ -1,7 +1,7 @@
 const stats = [
   { value: '€500–2,000', label: 'Ticket size', highlight: false },
   { value: 'No equity', label: 'We don’t take a cut', highlight: true },
-  { value: 'Hours, not months', label: 'From pitch to funded', highlight: false },
+  { value: 'Days, not months', label: 'From pitch to funded', highlight: false },
 ]
 
 // Design-system StatTile: 1.5px ink outline, 8px corners, Space Grotesk 28px value, Inter 12px caption.

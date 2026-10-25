@@ -4,7 +4,7 @@ import Eyebrow from './Eyebrow'
 const steps = [
   { n: '01', title: 'Pitch.', body: 'Record a 60-second video. Tell us what you’re building and why.' },
   { n: '02', title: 'Submit.', body: 'Drop it through the form below. Takes a minute.' },
-  { n: '03', title: 'Get funded.', body: 'We review fast. If it’s a yes, money hits in hours.' },
+  { n: '03', title: 'Get funded.', body: 'We review fast. If it’s a yes, money hits in days.' },
 ]
 
 // Design-system StepFlow: outlined steps joined by →, the last step filled with the brand yellow.
