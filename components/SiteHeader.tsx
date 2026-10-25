@@ -1,15 +1,16 @@
 import ApplyButton from './ApplyButton'
 
+// Root-relative so the nav also works from the legal subpages.
 const links = [
-  ['#deal', 'The deal'],
-  ['#how', 'How it works'],
+  ['/#deal', 'The deal'],
+  ['/#how', 'How it works'],
 ]
 
 export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-paper border-b border-ink">
       <div className="max-w-container mx-auto px-6 py-[14px] flex items-center gap-6">
-        <a href="#top" aria-label="TU Microfund – home" className="shrink-0">
+        <a href="/" aria-label="TU Microfund – home" className="shrink-0">
           <img src="/logos/microfund.svg" alt="TU Microfund" className="h-[30px] w-auto" />
         </a>
         <nav className="ml-auto flex flex-wrap gap-5">

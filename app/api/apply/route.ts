@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     const budget = formData.get('budget')
     const notes = formData.get('notes')
     const video = formData.get('video')
+    const consent = formData.get('consent')
 
     if (
       typeof name !== 'string' || !name.trim() ||
@@ -51,6 +52,15 @@ export async function POST(req: NextRequest) {
 
     if (!(video instanceof File) || video.size === 0) {
       return NextResponse.json({ error: 'A video file is required.' }, { status: 400 })
+    }
+
+    // Consent is a legal precondition for storing any of this, so re-check it
+    // here rather than trusting the client-side gate.
+    if (consent !== 'true') {
+      return NextResponse.json(
+        { error: 'Data-processing consent is required to submit an application.' },
+        { status: 400 }
+      )
     }
 
     await mkdir(UPLOADS_DIR, { recursive: true })
@@ -72,6 +82,7 @@ export async function POST(req: NextRequest) {
         notes: typeof notes === 'string' && notes.trim() ? notes : null,
         video: { savedAs: savedFilename, sizeBytes: video.size, original: video.name },
         submittedAt,
+        consentGivenAt: submittedAt,
       })
       return NextResponse.json({ ok: true })
     }
@@ -92,6 +103,8 @@ export async function POST(req: NextRequest) {
         }`,
         inline: false,
       },
+      // Keep a record of when consent was given alongside the data it covers.
+      { name: 'Consent', value: `Data processing agreed at ${submittedAt}`, inline: false },
     ]
 
     const payloadJson = {

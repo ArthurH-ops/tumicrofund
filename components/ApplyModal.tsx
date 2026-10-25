@@ -27,6 +27,7 @@ export default function ApplyModal() {
   const [budget, setBudget] = useState('')
   const [notes, setNotes] = useState('')
   const [video, setVideo] = useState<File | null>(null)
+  const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState<Status>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -93,6 +94,7 @@ export default function ApplyModal() {
     setBudget('')
     setNotes('')
     setVideo(null)
+    setConsent(false)
     setStatus('idle')
     setErrorMessage('')
   }
@@ -131,6 +133,11 @@ export default function ApplyModal() {
       setStatus('error')
       return
     }
+    if (!consent) {
+      setErrorMessage('Please confirm you agree to us processing your application.')
+      setStatus('error')
+      return
+    }
 
     setStatus('submitting')
     setErrorMessage('')
@@ -143,6 +150,7 @@ export default function ApplyModal() {
     fd.append('budget', budget)
     fd.append('notes', notes)
     fd.append('video', video)
+    fd.append('consent', 'true')
 
     try {
       const res = await fetch('/api/apply', { method: 'POST', body: fd })
@@ -280,6 +288,8 @@ export default function ApplyModal() {
                   />
                 </Field>
 
+                <ConsentField checked={consent} onChange={setConsent} />
+
                 {status === 'error' && errorMessage && (
                   <p
                     role="alert"
@@ -367,6 +377,60 @@ function VideoField({ file, onChange }: { file: File | null; onChange: (f: File 
         </p>
       </div>
     </div>
+  )
+}
+
+// GDPR consent gate. Submitting is blocked until this is ticked, and the route
+// handler re-checks it server-side.
+function ConsentField({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <label htmlFor="consent" className="flex items-start gap-3 cursor-pointer select-none">
+      <span className="relative mt-[2px] shrink-0">
+        <input
+          id="consent"
+          name="consent"
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          aria-describedby="consent-text"
+          className={`peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border border-ink bg-paper checked:bg-brand ${ringClass}`}
+        />
+        <svg
+          viewBox="0 0 24 24"
+          className="pointer-events-none absolute left-0 top-0 h-[18px] w-[18px] text-brand-ink opacity-0 peer-checked:opacity-100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={3.25}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 12.5l4.5 4.5L19 7.5" />
+        </svg>
+      </span>
+      <span id="consent-text" className="text-[13px] leading-[1.5] text-ink-2">
+        I agree that Startup Factory – Innovationhub 1040 GmbH may store and process the details and video I submit
+        here in order to review my application and reply to me. I can withdraw this at any time by emailing{' '}
+        <a
+          href="mailto:hello@spinofffactory.at"
+          onClick={(e) => e.stopPropagation()}
+          className="text-ink underline decoration-brand-deep decoration-2 underline-offset-[3px] hover:text-brand-ink"
+        >
+          hello@spinofffactory.at
+        </a>
+        . See the{' '}
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="text-ink underline decoration-brand-deep decoration-2 underline-offset-[3px] hover:text-brand-ink"
+        >
+          Privacy Policy
+        </a>
+        .
+      </span>
+    </label>
   )
 }
 
